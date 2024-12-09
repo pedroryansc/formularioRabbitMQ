@@ -8,13 +8,14 @@ $canal = $conexao->channel();
 
 $canal->queue_declare("fila", false, false, false, false);
 
-echo "[*] Esperando por mensagens. Para cancelar, pressione CTRL + C \n";
+echo "[*] Esperando por dados. Para cancelar, pressione CTRL + C \n";
 
-$callback = function($msg){
-    echo "[x] Mensagem '".$msg->getBody()."' recebida \n";
+$callback = function($dados){
+    echo "[x] Dados recebidos \n";
 
-    $objetoJson = json_decode($msg->getBody());
-    echo $objetoJson->nome;
+    $dadosJson = json_decode($dados->getBody());
+
+    echo "Nome: ".$dadosJson->nome."\nData de Lançamento: ".date_format(date_create($dadosJson->dataLancamento), "d/m/Y")."\n";
 };
 
 $canal->basic_consume("fila", "", false, true, false, false, $callback);
